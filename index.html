@@ -384,7 +384,7 @@ function describe(el){
  if(q('.s-duck'))return 'Tapped the duck (quack ♥)';
  if(q('#mus'))return on?'Turned the music back on':'Paused the music';
  if(q('#crum'))return 'Opened the crumpled note';
- if(t=q('#mini button'))return `Crumpled note → ticked “${clip(t.textContent)}”`;
+ if(t=q('#mini button'))return `Crumpled note → ticked “${clip(t.textContent.replace('✓',''))}”`;
  if(q('#yes'))return 'Tapped “Okay, I read it ♥”';
  if(q('#time'))return 'Tapped “I need a little time”';
  if(q('#closeSecret'))return 'Read the secret note, tapped “Keep reading”';
@@ -403,7 +403,7 @@ const pg=document.querySelectorAll('#chapters .page');
 pg[2].insertAdjacentHTML('beforeend',`<button class="crum" id="crum">psst… a crumpled note fell out. Open it?</button>
 <div class="mini" id="mini">Do you like me?<br><button data-a="Noted. Very, very noted ♥"><span class="box"></span>Yes</button><button data-a="Okay okay. I’ll still wait 😄"><span class="box"></span>No</button><button data-a="Deal. January it is."><span class="box"></span>Ask me again in January</button><div class="ans" id="ans"></div><div style="font-size:16px;color:#7a5563">(your answer goes to Gaurav 😄)</div></div>`);
 document.getElementById('crum').addEventListener('click',e=>{e.currentTarget.style.display='none';document.getElementById('mini').classList.add('open')});
-document.querySelectorAll('#mini button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#mini .box').forEach(x=>x.textContent='');b.querySelector('.box').textContent='✓';document.getElementById('ans').textContent=b.dataset.a;notify('“Do you like me?” → Trishu ticked: '+b.textContent.trim(),'Do you like me? She ticked: '+b.textContent.trim())}));
+document.querySelectorAll('#mini button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#mini .box').forEach(x=>x.textContent='');b.querySelector('.box').textContent='✓';document.getElementById('ans').textContent=b.dataset.a;const pick=b.textContent.replace('✓','').trim();notify('“Do you like me?” → Trishu ticked: '+pick,'Do you like me? She ticked: '+pick)}));
 const spots=[[document.querySelector('.hero'),'left:6%;bottom:8%'],[pg[1],'right:14px;bottom:8px'],[document.querySelector('.low'),'left:10px;top:10px'],[pg[5],'right:14px;bottom:8px'],[document.querySelector('.letter'),'right:16px;bottom:10px']];
 let found=0;const tr=document.getElementById('tracker'),sec=document.getElementById('secret');
 spots.forEach(([el,pos])=>{const b=document.createElement('button');b.className='hid';b.textContent='♥';b.setAttribute('aria-label','A hidden heart');b.style.cssText=pos;
