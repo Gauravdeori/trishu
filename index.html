@@ -361,7 +361,7 @@ star:'<svg viewBox="0 0 100 100"><path d="M50 6l13 28 30 4-22 21 6 31-27-15-27 1
 const MAIL='https://formsubmit.co/ajax/deorigaurav1400@gmail.com';
 function post(data,keep){try{fetch(MAIL,{method:'POST',keepalive:!!keep,headers:{'Content-Type':'application/json',Accept:'application/json'},
  body:JSON.stringify(Object.assign({_captcha:'false'},data))}).catch(()=>{})}catch(e){}}
-function notify(subject,message){post({_subject:subject,message,time:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),_template:'box'})}
+function notify(subject,message){post({_subject:subject,message,time:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),_template:'box'},true)}
 
 /* tap log: every tap is recorded, then mailed as one digest (45s after a tap, every 25 taps, or when she leaves) */
 const stamp=()=>new Date().toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit'});
@@ -401,12 +401,12 @@ const pg=document.querySelectorAll('#chapters .page');
 pg[2].insertAdjacentHTML('beforeend',`<button class="crum" id="crum">psst… a crumpled note fell out. Open it?</button>
 <div class="mini" id="mini">Do you like me?<br><button data-a="Noted. Very, very noted ♥"><span class="box"></span>Yes</button><button data-a="Okay okay. I’ll still wait 😄"><span class="box"></span>No</button><button data-a="Deal. January it is."><span class="box"></span>Ask me again in January</button><div class="ans" id="ans"></div><div style="font-size:16px;color:#7a5563">(your answer goes to Gaurav 😄)</div></div>`);
 document.getElementById('crum').addEventListener('click',e=>{e.currentTarget.style.display='none';document.getElementById('mini').classList.add('open')});
-document.querySelectorAll('#mini button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#mini .box').forEach(x=>x.textContent='');b.querySelector('.box').textContent='✓';document.getElementById('ans').textContent=b.dataset.a;notify('Trishu answered the crumpled note','Do you like me? She ticked: '+b.textContent.trim())}));
+document.querySelectorAll('#mini button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#mini .box').forEach(x=>x.textContent='');b.querySelector('.box').textContent='✓';document.getElementById('ans').textContent=b.dataset.a;notify('“Do you like me?” → Trishu ticked: '+b.textContent.trim(),'Do you like me? She ticked: '+b.textContent.trim())}));
 const spots=[[document.querySelector('.hero'),'left:6%;bottom:8%'],[pg[1],'right:14px;bottom:8px'],[document.querySelector('.low'),'left:10px;top:10px'],[pg[5],'right:14px;bottom:8px'],[document.querySelector('.letter'),'right:16px;bottom:10px']];
 let found=0;const tr=document.getElementById('tracker'),sec=document.getElementById('secret');
 spots.forEach(([el,pos])=>{const b=document.createElement('button');b.className='hid';b.textContent='♥';b.setAttribute('aria-label','A hidden heart');b.style.cssText=pos;
  b.addEventListener('click',e=>{e.stopPropagation();if(b.classList.contains('got'))return;b.classList.add('got');found++;document.getElementById('got').textContent=found;tr.classList.add('show');
- if(found===5)setTimeout(()=>sec.classList.add('open'),700);else setTimeout(()=>tr.classList.remove('show'),2500)});el.appendChild(b)});
+ if(found===5){setTimeout(()=>sec.classList.add('open'),700);notify('Trishu found all 5 hidden hearts ♥','She found every hidden heart and opened the secret note.')}else setTimeout(()=>tr.classList.remove('show'),2500)});el.appendChild(b)});
 document.getElementById('closeSecret').addEventListener('click',()=>sec.classList.remove('open'));
 document.getElementById('sign').addEventListener('click',()=>{document.getElementById('pps').textContent=found<5?`P.P.P.S. You found ${found} of 5 hidden hearts. Go back and look 😄`:'P.P.P.S. You found every single one. Of course you did.'});
 document.querySelectorAll('.card').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('flip')));
@@ -444,8 +444,8 @@ tick();setInterval(tick,30000);
 const reply=document.getElementById('reply');
 document.getElementById('say').addEventListener('submit',e=>{e.preventDefault();const t=document.getElementById('msg'),v=t.value.trim();if(!v)return;
  notify('Trishu sent you a message ♥',v);t.value='';document.getElementById('sent').textContent='Sent. He’ll read it, promise ♥'});
-document.getElementById('yes').addEventListener('click',()=>{reply.textContent="That’s all I wanted. Now smile, and see you in January ♥";notify('Trishu replied ♥','She tapped: Okay, I read it ♥');if(!reduce)for(let n=0;n<40;n++)setTimeout(()=>heart(true),n*60)});
-document.getElementById('time').addEventListener('click',()=>{reply.textContent="Take all the time you need. I’m not going anywhere ♥";notify('Trishu replied','She tapped: I need a little time')});
+document.getElementById('yes').addEventListener('click',()=>{reply.textContent="That’s all I wanted. Now smile, and see you in January ♥";notify('Trishu replied: “Okay, I read it ♥”','She tapped: Okay, I read it ♥');if(!reduce)for(let n=0;n<40;n++)setTimeout(()=>heart(true),n*60)});
+document.getElementById('time').addEventListener('click',()=>{reply.textContent="Take all the time you need. I’m not going anywhere ♥";notify('Trishu replied: “I need a little time”','She tapped: I need a little time')});
 }
 </script>
 </body>
