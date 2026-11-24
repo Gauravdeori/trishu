@@ -4,7 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>From Class 4, Always</title>
+<meta name="description" content="A little letter, from Class 4 till today.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#fff0f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1f1030" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="For Trishu ♥">
+<meta property="og:description" content="A little letter, from Class 4 till today. Tap to open.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%99%A5%3C/text%3E%3C/svg%3E">
+<link rel="preload" as="image" href="img/pink.webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://formsubmit.co" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Tiro+Devanagari+Hindi&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
 /* VOICE: tender, a little playful, honest.
@@ -207,8 +218,8 @@ h2::after{content:"";display:block;width:120px;height:12px;margin-top:6px;backgr
     <h1 class="rv">From Class 4,<br>still you.</h1>
     <p class="sub rv">This is a story I’ve wanted to tell you for a very long time. Scroll slowly.</p>
     <div class="stack rv">
-      <div class="pol"><div class="ph has"><img src="img/pink.jpg" alt="You in pink"></div><div class="back">The one I look at the most. Don’t tell anyone.</div><div class="cap">pretty in pink</div></div>
-      <div class="pol"><div class="ph has"><img src="img/hi.jpg" alt="You, smiling at the camera"></div><div class="back">Hi to you too. Yes, I’m smiling right now.</div><div class="cap">hi, you ♥</div></div>
+      <div class="pol"><div class="ph has"><img src="img/pink.webp" alt="You in pink" fetchpriority="high" decoding="async"></div><div class="back">The one I look at the most. Don’t tell anyone.</div><div class="cap">pretty in pink</div></div>
+      <div class="pol"><div class="ph has"><img src="img/hi.webp" alt="You, smiling at the camera" decoding="async"></div><div class="back">Hi to you too. Yes, I’m smiling right now.</div><div class="cap">hi, you ♥</div></div>
     </div>
     <div class="scroll-hint">scroll ↓</div>
   </section>
@@ -298,7 +309,7 @@ const chapters=[
 document.getElementById('chapters').innerHTML=chapters.map(c=>`<article class="page rv"><span class="doodle">${c.d}</span><span class="tag">${c.tag}</span><h3>${c.t}</h3><p>${c.p}</p></article>`).join('');
 
 const pics=[["throwback","throwback you","Same eyes as Class 4. Still can’t win a staring contest with you."],["silly","the silly one","The real you. My favourite version."],["look","that look","This look = I’m about to get scolded."],["night","late-night you","Late nights, long talks. My favourite kind."],["mirror","mirror selfie queen","Confidence: 100. Me looking at this: also 100."],["red","in red","Red suits you. Don’t argue."],["shopping","shopping day","The duck is back. I see you 🐥"]];
-document.getElementById('wall').innerHTML=pics.map(c=>`<div class="pol rv"><div class="ph has"><img src="img/${c[0]}.jpg" alt="" loading="lazy"></div><div class="back">${c[2]}</div><div class="cap">${c[1]}</div></div>`).join('');
+document.getElementById('wall').innerHTML=pics.map(c=>`<div class="pol rv"><div class="ph has"><img src="img/${c[0]}.webp" alt="" loading="lazy" decoding="async"></div><div class="back">${c[2]}</div><div class="cap">${c[1]}</div></div>`).join('');
 
 const cards=[
  ["This time, wait","I know. Every time I bring this topic up, you cut me off. This time, just wait. Don’t push it away. Read till the end ♥"],
@@ -348,8 +359,44 @@ star:'<svg viewBox="0 0 100 100"><path d="M50 6l13 28 30 4-22 21 6 31-27-15-27 1
  const d=document.createElement('div');d.className='stk s-'+k;d.style.cssText=pos+';animation-delay:'+(-n*.7)+'s';d.innerHTML=SV[k];host.appendChild(d);
  if(k==='duck')d.addEventListener('click',()=>{d.classList.remove('jump');void d.offsetWidth;d.classList.add('jump');const q=document.createElement('span');q.className='quack';q.textContent='quack ♥';d.appendChild(q);setTimeout(()=>q.remove(),1200)})});
 const MAIL='https://formsubmit.co/ajax/deorigaurav1400@gmail.com';
-function notify(subject,message){try{fetch(MAIL,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
- body:JSON.stringify({_subject:subject,message,time:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),_template:'box',_captcha:'false'})}).catch(()=>{})}catch(e){}}
+function post(data,keep){try{fetch(MAIL,{method:'POST',keepalive:!!keep,headers:{'Content-Type':'application/json',Accept:'application/json'},
+ body:JSON.stringify(Object.assign({_captcha:'false'},data))}).catch(()=>{})}catch(e){}}
+function notify(subject,message){post({_subject:subject,message,time:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),_template:'box'})}
+
+/* tap log: every tap is recorded, then mailed as one digest (45s after a tap, every 25 taps, or when she leaves) */
+const stamp=()=>new Date().toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+let taps=[],flushT=0,tapN=0;
+function flush(keep){clearTimeout(flushT);flushT=0;if(!taps.length)return;const list=taps.splice(0),data={_subject:`Trishu tapped ${list.length} thing${list.length>1?'s':''} ♥ (${stamp()})`,_template:'table'};
+ list.forEach(t=>data['Tap '+String(t.n).padStart(3,'0')]=t.s);post(data,keep)}
+function logTap(s){if(!s)return;taps.push({n:++tapN,s:stamp()+' · '+s});if(taps.length>=25)flush();else if(!flushT)flushT=setTimeout(flush,45000)}
+addEventListener('pagehide',()=>flush(true));
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flush(true)});
+const clip=(s,n=70)=>{s=(s||'').replace(/\s+/g,' ').trim();return s.length>n?s.slice(0,n)+'…':s};
+function where(el){const sec=el.closest&&el.closest('section');if(!sec)return 'the opening screen';const h=sec.querySelector('h2');return h?`“${clip(h.textContent,40)}”`:'the top of the page'}
+function describe(el){
+ const q=s=>el.closest(s);let t;
+ if(q('#note'))return 'Opened the envelope';
+ if(t=q('.hid'))return `Found a hidden heart (${found}/5)`;
+ if(t=q('.card'))return `${t.classList.contains('flip')?'Flipped open':'Flipped back'} card “${clip(t.querySelector('.f').textContent)}”`;
+ if(t=q('.pol'))return `${t.classList.contains('flip')?'Turned over':'Turned back'} photo “${clip(t.querySelector('.cap').textContent)}”`;
+ if(q('.s-duck'))return 'Tapped the duck (quack ♥)';
+ if(q('#mus'))return on?'Turned the music back on':'Paused the music';
+ if(q('#crum'))return 'Opened the crumpled note';
+ if(t=q('#mini button'))return `Crumpled note → ticked “${clip(t.textContent)}”`;
+ if(q('#yes'))return 'Tapped “Okay, I read it ♥”';
+ if(q('#time'))return 'Tapped “I need a little time”';
+ if(q('#closeSecret'))return 'Read the secret note, tapped “Keep reading”';
+ if(q('#say button'))return 'Pressed “Send to Gaurav”';
+ if(q('#msg'))return 'Tapped the reply box';
+ if(q('#sign'))return `Tapped your signature (had found ${found}/5 hearts)`;
+ if(t=q('#secret'))return 'Tapped outside the secret note';
+ if(t=q('.low,.high'))return `Tapped “${clip(t.querySelector('.hand').textContent)}”`;
+ if(t=q('.letter'))return 'Tapped the letter: “'+clip((q('p')||t).textContent,60)+'”';
+ if(t=q('.page'))return `Tapped chapter “${clip(t.querySelector('h3').textContent)}”`;
+ if(t=q('#count'))return 'Tapped the January countdown';
+ if(t=q('h1,h2,h3,p,.big,.hand,.scroll-hint'))return `Tapped text in ${where(el)}: “${clip(t.textContent,60)}”`;
+ return `Tapped empty space in ${where(el)}`}
+document.addEventListener('click',e=>{const el=e.target;setTimeout(()=>{try{logTap(describe(el))}catch(x){}},0)},true);
 const pg=document.querySelectorAll('#chapters .page');
 pg[2].insertAdjacentHTML('beforeend',`<button class="crum" id="crum">psst… a crumpled note fell out. Open it?</button>
 <div class="mini" id="mini">Do you like me?<br><button data-a="Noted. Very, very noted ♥"><span class="box"></span>Yes</button><button data-a="Okay okay. I’ll still wait 😄"><span class="box"></span>No</button><button data-a="Deal. January it is."><span class="box"></span>Ask me again in January</button><div class="ans" id="ans"></div><div style="font-size:16px;color:#7a5563">(your answer goes to Gaurav 😄)</div></div>`);
