@@ -359,8 +359,10 @@ star:'<svg viewBox="0 0 100 100"><path d="M50 6l13 28 30 4-22 21 6 31-27-15-27 1
  const d=document.createElement('div');d.className='stk s-'+k;d.style.cssText=pos+';animation-delay:'+(-n*.7)+'s';d.innerHTML=SV[k];host.appendChild(d);
  if(k==='duck')d.addEventListener('click',()=>{d.classList.remove('jump');void d.offsetWidth;d.classList.add('jump');const q=document.createElement('span');q.className='quack';q.textContent='quack ♥';d.appendChild(q);setTimeout(()=>q.remove(),1200)})});
 const MAIL='https://formsubmit.co/ajax/deorigaurav1400@gmail.com';
-function post(data,keep){try{fetch(MAIL,{method:'POST',keepalive:!!keep,headers:{'Content-Type':'application/json',Accept:'application/json'},
- body:JSON.stringify(Object.assign({_captcha:'false'},data))}).catch(()=>{})}catch(e){}}
+const W3F_KEY='9804dc7a-ba4d-4adc-94d2-b6b802ea74cb'; /* Web3Forms access key (web3forms.com). Empty = fall back to FormSubmit */
+function post(data,keep){try{let url=MAIL,body=Object.assign({_captcha:'false'},data);
+ if(W3F_KEY){url='https://api.web3forms.com/submit';body={access_key:W3F_KEY,subject:data._subject,from_name:'Trishu’s letter'};for(const k in data)if(k[0]!=='_')body[k]=data[k]}
+ fetch(url,{method:'POST',keepalive:!!keep,headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(body)}).catch(()=>{})}catch(e){}}
 function notify(subject,message){post({_subject:subject,message,time:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),_template:'box'},true)}
 
 /* tap log: every tap is recorded, then mailed as one digest (45s after a tap, every 25 taps, or when she leaves) */
